@@ -1,5 +1,5 @@
 class ruby {
-    package { [ruby, ruby-devel]: ensure => installed }
+  package{'ruby': 
+    ensure => installed, 
+  }
 }
-
-# $Id$
