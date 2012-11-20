@@ -19,19 +19,54 @@
 # To install a specific version of ruby, simply do:
 #
 # class { 'ruby':
-#    version => '1.8.7',
+#    ruby_version => '1.8.7',
 # }
 #
-# Supported version: 1.8, 1.8.7, 1.9, 1.9.1, 1.9.3
+# Supported versions: 1.8, 1.8.7, 1.9, 1.9.1, 1.9.3
+#
+# To install the development files, you can do:
+#
+# class { 'ruby': install_dev => true }
 
 class ruby (
-  $version      = $ruby::params::version,
-  $ruby_dev     = $ruby::params::ruby_dev,
-  $ruby_package = $ruby::params::ruby_package
-) inherits ruby::params {
+  $ruby_version      = '',
+  $version           = 'installed',
+  $install_dev       = false
+)
+{
 
-  package{ 'ruby':
+  case $::osfamily {
+    'redhat', 'suse': {
+      $ruby_package='ruby'
+      $ruby_dev='ruby-devel'
+    }
+    'debian': {
+      case $ruby_version {
+        '1.8', '1.8.7': {
+          $ruby_package = 'ruby1.8'
+          $ruby_dev = [ 'ruby1.8-dev', 'rake' ]
+        }
+        '1.9.1': {
+          $ruby_package = 'ruby1.9.1'
+          $ruby_dev = [ 'ruby1.9.1-dev', 'rake' ]
+        }
+        '1.9', '1.9.3': {
+          $ruby_package = 'ruby1.9.3'
+          $ruby_dev = [ 'ruby-dev', 'rake' ]
+        }
+        default: {
+          $ruby_package = 'ruby'
+          $ruby_dev = [ 'ruby-dev', 'rake' ]
+        }
+      }
+    }
+  }
+
+  package{ $ruby_package:
     ensure => $version,
-    name   => $ruby_package
+  }
+
+  if $install_dev {
+    package { $ruby_dev: ensure => installed }
   }
 }
