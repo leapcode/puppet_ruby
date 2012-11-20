@@ -14,7 +14,6 @@
 class ruby::params {
 
   $version = 'installed'
-  $ruby_package = 'ruby'
 
   case $::osfamily {
     'redhat', 'suse': {
