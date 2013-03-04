@@ -1,7 +1,8 @@
 class ruby::devel {
   include ruby
-  package{"ruby-devel.${::architecture}":
-    ensure => installed,
+
+  package { $ruby::ruby_dev:
+    ensure  => installed,
     require => Package['ruby'],
   }
 }

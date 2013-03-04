@@ -67,6 +67,6 @@ class ruby (
   }
 
   if $install_dev {
-    package { $ruby_dev: ensure => installed }
+   include ruby::devel
   }
 }
