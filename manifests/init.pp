@@ -35,12 +35,12 @@ class ruby (
 )
 {
 
-  case $::osfamily {
+  case $::operatingsystem {
     'redhat', 'suse': {
       $ruby_package='ruby'
       $ruby_dev='ruby-devel'
     }
-    'debian': {
+    'debian', 'ubuntu': {
       case $ruby_version {
         '1.8', '1.8.7': {
           $ruby_package = 'ruby1.8'
@@ -67,6 +67,6 @@ class ruby (
   }
 
   if $install_dev {
-   include ruby::devel
+    include ruby::devel
   }
 }
